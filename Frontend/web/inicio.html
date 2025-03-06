@@ -6,6 +6,7 @@
     <title>Punto de Venta - Paletería</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../css/inicio.css"> <!-- Vincula el archivo CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/inicio.js" defer></script>  <!-- Vincula el archivo JS -->
 </head>
 <body class="bg-gray-200 p-4">
@@ -16,12 +17,8 @@
         <div class="md:col-span-3 bg-white p-4 shadow rounded-lg">
             <input type="text" id="searchBar" placeholder="Buscar artículo" class="w-full px-3 py-2 border rounded-lg" onclick="openModal('searchModal')">
             
-            <div class="mt-4 grid grid-cols-2 md:grid-cols-5 gap-2">
-                <button class="bg-yellow-400 p-3 rounded-lg shadow" onclick="openModal('categoryModal', 'helados')">Helados</button>
-                <button class="bg-blue-400 p-3 rounded-lg shadow" onclick="openModal('categoryModal', 'paletas')">Paletas</button>
-                <button class="bg-green-400 p-3 rounded-lg shadow" onclick="openModal('categoryModal', 'refrescos')">Refrescos</button>
-                <button class="bg-purple-400 p-3 rounded-lg shadow" onclick="openModal('categoryModal', 'snacks')">Snacks</button>
-                <button class="bg-gray-400 p-3 rounded-lg shadow">Más...</button>
+            <div id="categoriesContainer" class="mt-4 grid grid-cols-2 md:grid-cols-5 gap-2">
+                <!--llegan las categorias y se crean botones-->
             </div>
             
             <!-- Tabla de productos seleccionados -->
@@ -92,7 +89,7 @@
         <div class="header">
             <!-- Agregamos el logo aquí -->
             <div class="text-center mb-4">
-                <img src="C:\wamp64\www\pos\Frontend\web\imagenes\logo.JPG" alt="Logo" class="logo">
+                <img src="/pos/Frontend/imagenes/logo.JPG" alt="Logo" class="logo">
             </div>
             <p><strong>Negocio:</strong> Paletería EL PAPAN</p>
             <p><strong>Dirección:</strong> Calle Ficticia #123</p>

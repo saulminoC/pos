@@ -1,4 +1,4 @@
-const products = {
+/*const products = {
     helados: [{name: "Helado de Chocolate", price: 30}, {name: "Helado de Vainilla", price: 28}, {name: "Helado de Fresa", price: 25}],
     paletas: [{name: "Paleta de Mango", price: 15}, {name: "Paleta de Coco", price: 18}, {name: "Paleta de Tamarindo", price: 20}],
     refrescos: [{name: "Coca-Cola", price: 18}, {name: "Sprite", price: 16}, {name: "Fanta", price: 17}],
@@ -96,6 +96,174 @@ function updateTotal() {
     document.getElementById("totalPrice").textContent = `$${totalAmount.toFixed(2)}`;
 }
 
+
+
+*/
+
+// Función para cargar las categorías
+function loadCategories() {
+    const display = document.getElementById("categoriesContainer");
+
+    $.ajax({
+        url: '/pos/backend/obtener_categorias.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(categories) {
+            console.log(categories);  // Para depurar las categorías obtenidas
+
+            display.innerHTML = "";
+
+            const colors = ["bg-yellow-400", "bg-yellow-500", "bg-green-400", "bg-blue-400", "bg-blue-500"];
+
+            categories.forEach((category, index) => {
+                const colorClass = colors[index % colors.length];
+                const button = document.createElement("button");
+                button.classList = `${colorClass} p-3 rounded-lg shadow`;
+                button.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                button.onclick = () => openModal('categoryModal', category);
+                display.appendChild(button);
+            });
+        },
+        error: function() {
+            alert('Hubo un error al obtener las categorías.');
+        }
+    });
+}
+
+
+// Llamar a la función para cargar las categorías al cargar la página
+document.addEventListener('DOMContentLoaded', loadCategories);
+
+
+
+
+
+
+
+let selectedItems = [];
+let totalAmount = 0;
+
+// Abrir modal con la categoría seleccionada
+function openModal(modalId, category = null) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove("hidden");
+        if (category) {
+            loadCategoryProducts(category);  // Cargar productos de la categoría seleccionada
+        }
+    } else {
+        console.error(`Modal con ID ${modalId} no encontrado.`);
+    }
+
+    // Resetear el modal de búsqueda
+    if (modalId === "searchModal") {
+        document.getElementById('searchInput').value = '';
+        filterProducts('');
+    }
+}
+
+// Cerrar el modal
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add("hidden");
+    } else {
+        console.error(`Modal con ID ${modalId} no encontrado.`);
+    }
+}
+
+// Cargar productos según la categoría seleccionada
+function loadCategoryProducts(category) {
+    const display = document.getElementById("categoryProducts");
+    display.innerHTML = "";  // Limpiar productos anteriores
+    console.log(category);
+
+    // Hacer solicitud AJAX para obtener productos de la categoría seleccionada
+    $.ajax({
+        url: '/pos/backend/obtener_productos.php', // URL del script PHP que obtiene los productos
+        method: 'GET',
+        data: { categoria: category }, // Enviar la categoría seleccionada
+        dataType: 'json',
+        success: function(products) {
+            console.log('Respuesta del servidor:', products); // Imprime la respuesta en consola
+            if (products.length === 0) {
+                display.innerHTML = "<p>No hay productos disponibles en esta categoría.</p>";
+            } else {
+                products.forEach(product => {
+                    const button = document.createElement("button");
+                    button.classList = "bg-gray-300 p-2 rounded-lg shadow w-full";
+                    button.textContent = `${product.name} - $${product.price}`;
+                    button.onclick = () => selectProduct(product);
+                    display.appendChild(button);
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error en la solicitud AJAX:');
+            console.error('Estado:', status); // Estado de la solicitud
+            console.error('Error:', error); // Mensaje de error
+            console.error('Respuesta del servidor:', xhr.responseText); // Respuesta completa del servidor
+            alert('Hubo un error al obtener los productos.');
+        }
+    });
+    
+}
+
+// Seleccionar un producto y agregarlo a la lista
+function selectProduct(product) {
+    const quantity = prompt(`Ingrese la cantidad de ${product.name}:`, 1);
+    if (quantity && !isNaN(quantity) && quantity > 0) {
+        const existingProduct = selectedItems.find(item => item.name === product.name);
+
+        if (existingProduct) {
+            existingProduct.quantity += parseInt(quantity);
+            existingProduct.total = existingProduct.price * existingProduct.quantity;
+        } else {
+            selectedItems.push({
+                name: product.name,
+                quantity: parseInt(quantity),
+                price: product.price,
+                total: product.price * quantity
+            });
+        }
+
+        updateTable();
+        updateTotal();
+    }
+}
+
+// Actualizar la tabla de productos seleccionados
+function updateTable() {
+    const tableBody = document.getElementById("selectedProductsTable");
+    tableBody.innerHTML = "";  // Limpiar la tabla antes de agregar los productos
+
+    selectedItems.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td class="p-3 border">${item.name}</td>
+            <td class="p-3 border">${item.quantity}</td>
+            <td class="p-3 border">$${item.price}</td>
+            <td class="p-3 border">$${item.total}</td>
+            <td class="p-3 border">
+                <button class="bg-yellow-300 p-2 rounded-lg shadow" onclick="editQuantity(${index})">Editar</button>
+                <button class="bg-red-500 text-white p-2 rounded-lg shadow" onclick="confirmRemoveProduct(${index})">Eliminar</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    // Habilitar o deshabilitar botones de pago
+    document.getElementById("payCardBtn").disabled = selectedItems.length === 0;
+    document.getElementById("payCashBtn").disabled = selectedItems.length === 0;
+}
+
+// Actualizar el total de la venta
+function updateTotal() {
+    totalAmount = selectedItems.reduce((total, item) => total + item.total, 0);
+    document.getElementById("totalPrice").textContent = `$${totalAmount.toFixed(2)}`;
+}
+
+
 function editQuantity(index) {
     const newQuantity = prompt(`Ingrese la nueva cantidad para ${selectedItems[index].name}:`, selectedItems[index].quantity);
     if (newQuantity && !isNaN(newQuantity) && newQuantity > 0) {
@@ -163,34 +331,51 @@ function calculateChange() {
     acceptBtn.disabled = amountPaid <= 0;
 }
 
+// Función para realizar el pago
 function processPayment() {
-    // Llenar los datos del ticket
-    const ticketProducts = document.getElementById("ticketProducts");
-    const ticketTotal = document.getElementById("ticketTotal");
-    const ticketDate = document.getElementById("ticketDate");
+    const amountPaid = parseFloat(document.getElementById("amountPaid").value) || 0;
+    const change = amountPaid - totalAmount;
 
-    ticketDate.textContent = new Date().toLocaleString();
-    ticketProducts.innerHTML = "";
-    selectedItems.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td class="p-1">${item.name}</td>
-            <td class="p-1">${item.quantity}</td>
-            <td class="p-1">$${item.total}</td>
-        `;
-        ticketProducts.appendChild(row);
+    if (change < 0) {
+        alert("El monto pagado no es suficiente.");
+        return;
+    }
+
+    document.getElementById("change").value = `$${change.toFixed(2)}`;
+
+    // Datos que se enviarán al servidor
+    const dataToSend = {
+        productos: selectedItems,
+        total: totalAmount,
+        pagado: amountPaid,
+        cambio: change
+    };
+
+    // Mostrar los datos en la consola antes de enviarlos
+    console.log("Datos enviados al servidor:", dataToSend);
+
+    $.ajax({
+        url: '/pos/backend/registrar_venta.php',
+        method: 'POST',
+        contentType: 'application/json', // Importante para enviar JSON correctamente
+        dataType: 'json', // Esperamos una respuesta en JSON
+        data: JSON.stringify(dataToSend),
+        success: function(response) {
+            console.log("Respuesta del servidor:", response);
+            if (response.success) {
+                alert("Venta registrada exitosamente.");
+                resetSale();
+            } else {
+                alert("Error: " + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en AJAX:", xhr.responseText);
+            alert('Hubo un error al procesar el pago.');
+        }
     });
-    ticketTotal.textContent = `$${totalAmount.toFixed(2)}`;
-
-    // Mostrar el ticket y luego imprimir
-    document.getElementById("ticket").style.display = 'block'; // Muestra el ticket
-    window.print(); // Inicia la impresión
-    document.getElementById("ticket").style.display = 'none'; // Oculta el ticket después de imprimir
-
-    // Limpiar la pantalla para la siguiente venta
-    resetSale();
-    closeModal('paymentModal');
 }
+
 
 function resetSale() {
     // Limpiar la tabla de productos seleccionados
