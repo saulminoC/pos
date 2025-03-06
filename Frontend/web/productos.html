@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - Paletería</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Fondo de la página */
+        body {
+            background: linear-gradient(to right, #00aaff, #00d9c2); /* Fondo similar a inicio.html */
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Estilo del logo en la parte superior */
+        #logo {
+            width: 200px; /* Ajusta el tamaño según lo necesites */
+            height: auto;
+            margin: 30px auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .products-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .products-table th, .products-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .products-table th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        /* Estilo del modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo en la parte superior -->
+    <img id="logo" src="/pos/Frontend/imagenes/logo.JPG" alt="Logo">
+
+    <div class="container">
+        <div class="card">
+            <h2>Productos en Inventario</h2>
+    
+            <!-- Barra de búsqueda -->
+            <div class="mb-4">
+                <input type="text" id="searchInput" class="w-full px-3 py-2 border rounded-lg" placeholder="Buscar producto por nombre..." onkeyup="filterProducts()" />
+            </div>
+            
+            <!-- Contenedor con desplazamiento para la tabla -->
+            <div class="overflow-auto" style="max-height: 400px;">
+                <!-- Tabla de productos -->
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>ID Producto</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-list">
+                        <!-- Los productos se llenarán aquí mediante JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+    
+            <!-- Botón para añadir un producto nuevo -->
+            <button class="btn" onclick="openModal()">Añadir Producto</button>
+        </div>
+    </div>
+    
+
+    <!-- Modal para editar producto -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-center font-bold text-lg">Editar Producto</h3>
+            <form id="editForm">
+                <label for="editNombre">Nombre:</label>
+                <input type="text" id="editNombre" class="w-full px-3 py-2 border rounded-lg mb-4" required>
+
+                <label for="editDescripcion">Descripción:</label>
+                <textarea id="editDescripcion" class="w-full px-3 py-2 border rounded-lg mb-4" required></textarea>
+
+                <label for="editStock">Stock:</label>
+                <input type="number" id="editStock" class="w-full px-3 py-2 border rounded-lg mb-4" required>
+
+                <label for="editPrecio">Precio:</label>
+                <input type="number" id="editPrecio" class="w-full px-3 py-2 border rounded-lg mb-4" required>
+
+                <label for="editCategoria">Categoría:</label>
+                <select id="editCategoria" class="w-full px-3 py-2 border rounded-lg mb-4" required></select>
+
+                <button type="submit" class="btn bg-green-500 text-white py-2 px-4 rounded-lg">Guardar Cambios</button>
+                <button type="button" class="btn bg-red-500 text-white py-2 px-4 rounded-lg" onclick="closeEditModal()">Cerrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para añadir un producto -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-center font-bold">Añadir Producto</h3>
+            <form id="addProductForm">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" required>
+
+                <label for="descripcion">Descripción:</label>
+                <input type="text" id="descripcion" required>
+
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" required>
+
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" required>
+
+                <label for="categoria">Categoría:</label>
+                <select id="categoria" required></select>
+
+                <button type="submit">Guardar Producto</button>
+            </form>
+            <button onclick="closeAddModal()" class="btn">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Función para filtrar productos según la búsqueda
+        function filterProducts() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll("#product-list tr");
+
+            rows.forEach(row => {
+                const nameCell = row.cells[1]; // Columna de nombre del producto
+                const name = nameCell.textContent.toLowerCase();
+                
+                if (name.includes(searchValue)) {
+                    row.style.display = "";  // Mostrar fila si el nombre coincide
+                } else {
+                    row.style.display = "none";  // Ocultar fila si no coincide
+                }
+            });
+        }
+        // Función para cerrar el modal de edición
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";  // Ocultar el modal de edición
+        }
+
+        // Función para cerrar el modal de añadir producto
+        function closeAddModal() {
+            document.getElementById('addProductModal').style.display = 'none';  // Ocultar el modal de añadir producto
+        }
+
+        // Función para obtener los productos de la base de datos
+        function obtenerProductos() {
+            fetch('/pos/backend/productos/obtener_productos.php')
+                .then(response => response.json())
+                .then(data => {
+                    let productList = document.getElementById("product-list");
+                    productList.innerHTML = ''; // Limpiar la tabla antes de agregar los productos
+
+                    // Recorrer los productos y agregarlos a la tabla
+                    data.forEach(producto => {
+                        let row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${producto.id_producto}</td>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.stock}</td>
+                            <td>$${producto.precio_base}</td>
+                            <td>${producto.categoria}</td>
+                            <td><button class="btn" onclick="editProduct(${producto.id_producto})">Editar</button></td>
+                        `;
+                        productList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener los productos:', error);
+                });
+        }
+
+        // Función para abrir el modal de edición con los datos del producto
+        function editProduct(id) {
+            // Llamar a un endpoint para obtener los datos del producto por su id
+            fetch(`/pos/backend/productos/obtener_productos.php?id_producto=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Asegúrate de que estás obteniendo el producto correcto con el id
+                    const producto = data.find(p => p.id_producto == id);  // Encontrar el producto correcto
+        
+                    // Verifica los datos en la consola para asegurarte de que todo se está recibiendo correctamente
+                    console.log(producto); // Esto te ayudará a verificar si los datos se están recuperando correctamente
+        
+                    // Asignar los valores al formulario
+                    document.getElementById("editNombre").value = producto.nombre;
+                    document.getElementById("editDescripcion").value = producto.descripcion;
+                    document.getElementById("editStock").value = producto.stock;
+                    document.getElementById("editPrecio").value = producto.precio_base;
+                    document.getElementById("editCategoria").value = producto.categoria;
+        
+                    // Llamar a la función para obtener las categorías
+                    obtenerCategorias();
+        
+                    // Establecer el ID del producto a editar
+                    document.getElementById("editForm").dataset.id = id;
+        
+                    // Mostrar el modal de edición
+                    document.getElementById("editModal").style.display = "flex";
+                })
+                .catch(error => {
+                    console.error('Error al obtener el producto:', error);
+                });
+        }
+        
+
+        // Función para manejar el envío del formulario de edición
+        document.getElementById("editForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Obtener los valores del formulario
+            const id_producto = document.getElementById("editForm").dataset.id; // Usamos el ID del producto almacenado en el botón
+            const nombre = document.getElementById("editNombre").value;
+            const descripcion = document.getElementById("editDescripcion").value;
+            const stock = document.getElementById("editStock").value;
+            const precio_base = document.getElementById("editPrecio").value;
+            const categoria = document.getElementById("editCategoria").value;
+
+            // Enviar los datos para actualizar el producto
+            fetch('/pos/backend/productos/editar_producto.php', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_producto: id_producto,
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    stock: stock,
+                    precio_base: precio_base,
+                    categoria: categoria
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Producto actualizado con éxito");
+                    closeEditModal(); // Cerrar el modal
+                    obtenerProductos(); // Recargar la lista de productos
+                } else {
+                    alert("Hubo un error al actualizar el producto");
+                }
+            })
+            .catch(error => {
+                console.error("Error al actualizar el producto:", error);
+            });
+        });
+
+        // Función para abrir el modal de añadir producto
+        function openModal() {
+            document.getElementById('addProductModal').style.display = 'flex';
+            obtenerCategorias(); // Obtener las categorías cuando se abre el modal
+        }
+
+        // Función para obtener las categorías de la base de datos
+        // Función para obtener las categorías de la base de datos
+// Función para obtener las categorías de la base de datos
+function obtenerCategorias() {
+    fetch('/pos/backend/productos/productos_categorias.php')
+        .then(response => response.json())
+        .then(data => {
+            // Obtener el select de categoría en el modal de editar
+            let categoriaSelectEdit = document.getElementById('editCategoria');
+            categoriaSelectEdit.innerHTML = ''; // Limpiar las opciones anteriores
+
+            // Obtener el select de categoría en el modal de añadir producto
+            let categoriaSelectAdd = document.getElementById('categoria');
+            categoriaSelectAdd.innerHTML = ''; // Limpiar las opciones anteriores
+
+            // Añadir la opción por defecto en el modal de edición
+            let defaultOptionEdit = document.createElement('option');
+            defaultOptionEdit.value = '';
+            defaultOptionEdit.textContent = '-- Seleccione categoría --';
+            categoriaSelectEdit.appendChild(defaultOptionEdit);
+
+            // Añadir la opción por defecto en el modal de añadir producto
+            let defaultOptionAdd = document.createElement('option');
+            defaultOptionAdd.value = '';
+            defaultOptionAdd.textContent = '-- Seleccione categoría --';
+            categoriaSelectAdd.appendChild(defaultOptionAdd);
+
+            // Añadir las categorías al select de edición
+            data.forEach(categoria => {
+                let optionEdit = document.createElement('option');
+                optionEdit.value = categoria;
+                optionEdit.textContent = categoria;
+                categoriaSelectEdit.appendChild(optionEdit);
+                
+                // Añadir las categorías al select de añadir producto
+                let optionAdd = document.createElement('option');
+                optionAdd.value = categoria;
+                optionAdd.textContent = categoria;
+                categoriaSelectAdd.appendChild(optionAdd);
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener las categorías:', error);
+        });
+}
+
+
+        
+
+        // Función para manejar el envío del formulario de añadir producto
+        document.getElementById('addProductForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const stock = document.getElementById('stock').value;
+            const precio = document.getElementById('precio').value;
+            const categoria = document.getElementById('categoria').value;
+
+            // Enviar los datos al backend para agregar el producto
+            fetch('/pos/backend/productos/agregar_producto.php', {
+                method: 'POST',
+                body: JSON.stringify({
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    stock: stock,
+                    precio: precio,
+                    categoria: categoria
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Producto agregado exitosamente');
+                    closeAddModal();  // Cerrar el modal
+                    obtenerProductos();  // Recargar la lista de productos
+                } else {
+                    alert('Error al agregar el producto');
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar los datos:', error);
+            });
+        });
+
+        // Llamar a la función para obtener los productos cuando se carga la página
+        window.onload = obtenerProductos;
+    </script>
+</body>
+</html>

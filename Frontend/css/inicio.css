@@ -1,0 +1,100 @@
+/* Estilos para la impresión */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #ticket, #ticket * {
+        visibility: visible;
+    }
+    #ticket {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 58mm; /* Ajuste para la impresora de 58mm */
+        font-size: 12px;
+    }
+    .no-print {
+        display: none; /* Aseguramos que todo lo que no deba imprimirse esté oculto */
+    }
+}
+
+/* Mejoramos el diseño del ticket para hacerlo más atractivo */
+#ticket {
+    font-family: 'Arial', sans-serif;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 58mm;
+    margin: 0 auto;
+    background-color: #fff;
+    font-size: 12px;
+    display: none; /* Ocultamos el ticket por defecto */
+}
+#ticket h2 {
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+#ticket .header {
+    text-align: center;
+    font-size: 14px;
+}
+#ticket .header p {
+    margin: 0;
+    font-size: 12px;
+}
+#ticket .product-list {
+    margin-top: 10px;
+    border-top: 1px solid #000;
+    padding-top: 10px;
+}
+#ticket .product-list th, #ticket .product-list td {
+    padding: 3px;
+    text-align: left;
+}
+#ticket .product-list th {
+    font-weight: bold;
+}
+#ticket .product-list td {
+    font-size: 12px;
+}
+#ticket .total {
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+}
+#ticket .footer {
+    text-align: center;
+    font-size: 10px;
+    margin-top: 20px;
+    border-top: 1px solid #000;
+    padding-top: 10px;
+}
+
+/* Estilo general para la página */
+body {
+    background: linear-gradient(to right, #00aaff, #00d9c2); /* Fondo en degradado similar al diseño de la imagen */
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Personalización del logo */
+#ticket .header .logo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Estilo para el modal de búsqueda */
+#searchModal {
+    max-width: 500px;
+}
+#categoryModal {
+    max-width: 700px;
+}
