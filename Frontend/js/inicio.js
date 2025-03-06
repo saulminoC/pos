@@ -287,30 +287,7 @@ function removeProduct(index) {
     updateTotal();
 }
 
-function printTicket() {
-    const ticketProducts = document.getElementById("ticketProducts");
-    const ticketTotal = document.getElementById("ticketTotal");
-    const ticketDate = document.getElementById("ticketDate");
 
-    // Llenar los datos del ticket
-    ticketDate.textContent = new Date().toLocaleString();
-    ticketProducts.innerHTML = "";
-    selectedItems.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td class="p-1">${item.name}</td>
-            <td class="p-1">${item.quantity}</td>
-            <td class="p-1">$${item.total}</td>
-        `;
-        ticketProducts.appendChild(row);
-    });
-    ticketTotal.textContent = `$${totalAmount.toFixed(2)}`;
-
-    // Mostrar el ticket y luego imprimir
-    document.getElementById("ticket").style.display = 'block'; // Muestra el ticket
-    window.print(); // Inicia la impresión
-    document.getElementById("ticket").style.display = 'none'; // Oculta el ticket después de imprimir
-}
 
 function openPaymentModal() {
     document.getElementById("amountToPay").value = `$${totalAmount.toFixed(2)}`;
@@ -331,7 +308,6 @@ function calculateChange() {
     acceptBtn.disabled = amountPaid <= 0;
 }
 
-// Función para realizar el pago
 function processPayment() {
     const amountPaid = parseFloat(document.getElementById("amountPaid").value) || 0;
     const change = amountPaid - totalAmount;
@@ -357,14 +333,15 @@ function processPayment() {
     $.ajax({
         url: '/pos/backend/registrar_venta.php',
         method: 'POST',
-        contentType: 'application/json', // Importante para enviar JSON correctamente
-        dataType: 'json', // Esperamos una respuesta en JSON
+        contentType: 'application/json',
+        dataType: 'json',
         data: JSON.stringify(dataToSend),
         success: function(response) {
             console.log("Respuesta del servidor:", response);
             if (response.success) {
                 alert("Venta registrada exitosamente.");
-                resetSale();
+                fillTicket(dataToSend); // Llenar el ticket con los datos
+                showModal(); // Mostrar el modal con el ticket
             } else {
                 alert("Error: " + response.message);
             }
@@ -375,6 +352,54 @@ function processPayment() {
         }
     });
 }
+
+// Función para llenar el ticket con los datos de la venta
+function fillTicket(data) {
+    console.log(data);
+    document.getElementById("ticketDate").innerText = new Date().toLocaleString();
+    document.getElementById("ticketTotal").innerText = data.total.toFixed(2);
+
+    const ticketProducts = document.getElementById("ticketProducts");
+    ticketProducts.innerHTML = ""; // Limpiar tabla antes de agregar nuevos datos
+
+    data.productos.forEach(producto => {
+        let row = `<tr>
+                      <td class="p-1">${producto.name}</td>
+                      <td class="p-1">${producto.quantity}</td>
+                      <td class="p-1">$${producto.total.toFixed(2)}</td>
+                   </tr>`;
+        ticketProducts.innerHTML += row;
+    });
+
+    // Mostrar el ticket
+    showModal();
+}
+
+
+// Función para mostrar el modal del ticket
+function showModal() {
+    // Ocultar el resto del contenido
+    const allElements = document.body.children;
+    for (let i = 0; i < allElements.length; i++) {
+        if (allElements[i].id !== "ticket") {
+            allElements[i].style.display = "none"; // Ocultar otros elementos
+        }
+    }
+
+    // Mostrar el ticket
+    document.getElementById("ticket").style.display = "block";
+
+    // Imprimir automáticamente el ticket
+    setTimeout(function() {
+        window.print();
+    }, 500); // Usamos un pequeño retraso para asegurarnos de que el ticket esté visible antes de imprimir
+}
+
+// Evento que se ejecuta después de la impresión o cancelación
+window.onafterprint = function() {
+    // Redirigir a la página de inicio
+    window.location.href = "/pos/frontend/web/inicio.html"; // Cambia 'index.html' a la URL de tu pantalla de inicio
+};
 
 
 function resetSale() {
