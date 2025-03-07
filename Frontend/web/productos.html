@@ -5,27 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - Paletería</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
- <!-- Vincula el archivo CSS global del menú -->
- <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="/pos/Frontend/css/menu.css"> <!-- Asegúrate de poner la ruta correcta -->
  <!-- Vincula el archivo CSS de productos -->
  <link rel="stylesheet" href="../css/productos.css">
-
- <!-- Vincula el archivo JS del menú -->
- <!--<script src="../js/menu.js" defer></script>-->
- <!-- Vincula el archivo JS de productos -->
- <!--<script src="../js/productos.js" defer></script>-->
 </head>
 <body>
-  <!-- Menú lateral -->
-<div id="menu" class="menu menu-closed">
-    <!-- Botón de cerrar (X) -->
-    <span id="close-btn" class="close-btn">&#10005;</span>
-    <!-- Botón de abrir (hamburguesa) -->
-    <span id="hamburger-btn" class="hamburger-btn">&#9776;</span>
-    
-    <a href="/pos/Frontend/web/productos.html" class="menu-item">Productos</a>
-    <a href="/pos/Frontend/web/inventario.html" class="menu-item">Inventario</a>
+   <!-- Botón para abrir el menú -->
+   <div class="menu-toggle" onclick="toggleMenu()">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
 </div>
+
+<!-- Menú lateral -->
+<nav class="sidebar" id="sidebar">
+    <!-- Botón para cerrar el menú -->
+    <div class="close-btn" onclick="closeMenu()">×</div>
+    <ul>
+        <li><a href="inicio.html">Punto de Venta</a></li>
+        <li><a href="admin_sucursales.html">Administrar Sucursales</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <li><a href="/pos/index.html">Cerrar Sesión</a></li>
+
+    </ul>
+</nav>
 
 
     <!-- Logo en la parte superior -->

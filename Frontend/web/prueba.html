@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/pos/Frontend/css/menu.css"> <!-- Asegúrate de poner la ruta correcta -->
     <script src="/pos/Frontend/js/menu.js" defer></script> <!-- Asegúrate de poner la ruta correcta -->
-    <link rel="stylesheet" href="/pos/Frontend/css/admin_sucursales.css">
+
 </head>
 <body>
     <!-- Botón para abrir el menú -->
@@ -27,17 +27,25 @@
             <li><a href="/pos/index.html">Cerrar Sesión</a></li>
         </ul>
     </nav>
-    <!-- Logo en la parte superior -->
-    <img id="logo" src="/pos/Frontend/imagenes/logo.JPG" alt="Logo">
 
-    <div class="container">
-        <!-- Filtro y sucursales -->
-        <div class="sucursal-buttons">
-            <!-- Redirigir a sucursal.html con el ID de la sucursal como parámetro -->
-            <button class="btn" onclick="location.href='sucursal.html?sucursal=1'">Sucursal Papantla</button>
-            <button class="btn" onclick="location.href='sucursal.html?sucursal=2'">Sucursal Poza Rica</button>
-            <button class="btn" onclick="location.href='sucursal.html?sucursal=3'">Sucursal Tuxpan</button>
+    <!-- Contenido principal -->
+    <main id="main-content">
+        <!-- Logo en la parte superior -->
+        <img id="logo" src="/pos/Frontend/imagenes/logo.JPG" alt="Logo">
+
+        <div class="container">
+            <!-- Filtro y sucursales -->
+            <div class="sucursal-buttons">
+                <!-- Redirigir a sucursal.html con el ID de la sucursal como parámetro -->
+                <button class="btn" onclick="location.href='sucursal.html?sucursal=1'">Sucursal 1</button>
+                <button class="btn" onclick="location.href='sucursal.html?sucursal=2'">Sucursal 2</button>
+                <button class="btn" onclick="location.href='sucursal.html?sucursal=3'">Sucursal 3</button>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <script>
+        
+    </script>
 </body>
 </html>

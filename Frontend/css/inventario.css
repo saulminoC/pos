@@ -1,0 +1,45 @@
+/* inventario.css */
+
+/* Estilos para los botones */
+.btn {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* Estilo para los inputs y select */
+input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Tabla con borde */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #00aaff;
+    color: white;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
