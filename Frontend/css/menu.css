@@ -1,0 +1,120 @@
+/* productos.css */
+
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #00aaff, #00d9c2);
+    margin: 0;
+    padding: 0;
+}
+
+/* Menú lateral */
+.menu {
+    background-color: #2d3748; /* Color más oscuro */
+    color: white;
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.3s ease-in-out;
+    z-index: 1000; /* Asegúrate de que esté sobre otros elementos */
+    padding-top: 60px; /* Deja espacio para el botón de cerrar */
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.menu-closed {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.menu.open {
+    width: 250px;
+}
+
+/* Botón de cerrar (X) */
+.menu .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    display: none; /* Inicialmente no visible */
+}
+
+/* Botón de abrir (hamburguesa) */
+.menu .hamburger-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    display: block; /* Inicialmente visible */
+}
+
+/* Estilo de los enlaces del menú */
+.menu a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #4a5568; /* Línea divisoria */
+}
+
+.menu a:hover {
+    background-color: #4a5568; /* Color de fondo al pasar el mouse */
+}
+
+.menu .menu-item svg {
+    margin-right: 10px;
+}
+
+/* Estilos del contenedor principal (cuando el menú está abierto) */
+.container {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+/* Estilo para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+    }
+
+    .menu {
+        width: 0;
+    }
+
+    .menu.open {
+        width: 250px;
+    }
+}
+
+/* Estilo del logo (ajuste de tamaño) */
+#logo {
+    width: 150px;
+    height: auto;
+    margin: 30px auto;
+    display: block;
+}
+
+/* Responsividad para el botón de menú en pantallas pequeñas */
+@media (max-width: 768px) {
+    .menu a {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .menu .hamburger-btn {
+        display: block; /* Mostrar hamburguesa en pantallas pequeñas */
+    }
+
+    .menu .close-btn {
+        display: block; /* Mostrar la "X" en pantallas pequeñas cuando se abra el menú */
+    }
+}

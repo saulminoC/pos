@@ -1,0 +1,147 @@
+/* Fondo de la página */
+body {
+    background: linear-gradient(to right, #00aaff, #00d9c2); /* Fondo similar a inicio.html */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Estilo del logo en la parte superior */
+#logo {
+    width: 200px; /* Ajusta el tamaño según lo necesites */
+    height: auto;
+    margin: 30px auto;
+    display: block;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+ /* Ajustes responsivos */
+ @media (max-width: 768px) {
+    /* Logo más pequeño en pantallas pequeñas */
+    #logo {
+        width: 150px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .products-table {
+        font-size: 14px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-table th, .products-table td {
+        padding: 8px;
+    }
+
+    /* Botones más pequeños */
+    .btn {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.products-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.products-table th, .products-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.products-table th {
+    background-color: #f2f2f2;
+}
+
+.btn {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* Estilo del modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.modal-content button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+}
+
+.btn.bg-red-500 {
+    padding: 10px 20px;
+    background-color: #dc2626; /* Rojo más oscuro para mejorar visibilidad */
+    border-radius: 5px;
+    color: white;
+    font-size: 14px; /* Tamaño adecuado */
+}
