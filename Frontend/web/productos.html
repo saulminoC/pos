@@ -25,13 +25,7 @@
         <li><a href="inicio.html">Punto de Venta</a></li>
         <li><a href="admin_sucursales.html">Administrar Sucursales</a></li>
         <li><a href="productos.html">Productos</a></li>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <li><a href="inventario.html">Inventario</a></li>
         <li><a href="/pos/index.html">Cerrar Sesión</a></li>
 
     </ul>
@@ -44,6 +38,15 @@
     <div class="container">
         <div class="card">
             <h2>Productos en Inventario</h2>
+
+            <select id="selectSucursal" onchange="cargarProductos()" class="border p-2 mt-2">
+                <option value="">Selecciona una sucursal</option>
+                <option value="1">Sucursal Papatla</option>
+                <option value="2">Sucursal Poza Rica</option>
+                <option value="3">Sucursal Tuxpan</option>
+            </select>
+            
+
     
             <!-- Barra de búsqueda -->
             <div class="mb-4">
@@ -72,7 +75,7 @@
             </div>
     
             <!-- Botón para añadir un producto nuevo -->
-            <button class="btn" onclick="openModal()">Añadir Producto</button>
+            <button class="btn" onclick="openAddModal()">Añadir Producto</button>
         </div>
     </div>
     

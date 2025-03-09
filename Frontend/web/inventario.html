@@ -3,78 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario</title>
+    <title>Productos en Inventario</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/inventario.css">
-    <script src="../js/inventario.js" defer></script>
+    <link rel="stylesheet" href="/pos/Frontend/css/inventario.css">
+    <link rel="stylesheet" href="/pos/Frontend/css/menu.css">
+    <script src="/pos/Frontend/js/inventario.js" defer></script>
+    <script src="/pos/Frontend/js/menu.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1 class="text-center text-3xl mt-6">Reporte de Inventario</h1>
-    </header>
+    <!-- Botón para abrir el menú -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
 
-    <div class="container mt-10">
-        <!-- Filtro de Fecha -->
-        <div class="flex justify-between mb-4">
-            <input type="date" id="filterDate" class="px-4 py-2 border rounded" placeholder="Filtrar por Fecha">
-            <button class="btn" onclick="loadInventoryData()">Filtrar</button>
+    <!-- Menú lateral -->
+    <nav class="sidebar" id="sidebar">
+        <div class="close-btn" onclick="closeMenu()">×</div>
+        <ul>
+            <li><a href="inicio.html">Punto de Venta</a></li>
+            <li><a href="admin_sucursales.html">Administrar Sucursales</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+            <li><a href="/pos/index.html">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <img id="logo" src="/pos/Frontend/imagenes/logo.JPG" alt="Logo">
+
+    <div class="container">
+        <h1 class="text-center text-xl">Productos en Inventario</h1>
+        
+        <!-- Dropdown para elegir la sucursal -->
+        <div class="mb-4">
+            <label for="selectSucursal" class="text-lg">Selecciona una Sucursal:</label>
+            <select id="selectSucursal" onchange="cargarProductos()" class="border p-2 mt-2">
+                <option value="">Selecciona una sucursal</option>
+                <option value="1">Sucursal Papatla</option>
+                <option value="2">Sucursal Poza Rica</option>
+                <option value="3">Sucursal Tuxpan</option>
+            </select>
         </div>
 
-        <!-- Reporte de Stock Actual -->
-        <section id="stock-report" class="mb-8">
-            <h2 class="text-xl font-semibold mb-4">Reporte de Stock Actual</h2>
-            <table id="stockTable" class="w-full table-auto">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">ID Producto</th>
-                        <th class="border px-4 py-2">Nombre</th>
-                        <th class="border px-4 py-2">Stock Actual</th>
-                        <th class="border px-4 py-2">Precio</th>
-                        <th class="border px-4 py-2">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí se llenarán los productos mediante JS -->
-                </tbody>
-            </table>
-        </section>
+        <!-- Botones de descargar en Excel y PDF -->
+<div class="mb-4">
+    <button id="btnExcel" class="btn btn-primary" onclick="descargarExcel()">Descargar Excel</button>
+    <button id="btnPdf" class="btn btn-primary" onclick="descargarPDF()">Descargar PDF</button>
+</div>
 
-        <!-- Reporte de Movimientos -->
-        <section id="movement-report" class="mb-8">
-            <h2 class="text-xl font-semibold mb-4">Reporte de Movimientos</h2>
-            <table id="movementTable" class="w-full table-auto">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">ID Producto</th>
-                        <th class="border px-4 py-2">Movimiento</th>
-                        <th class="border px-4 py-2">Cantidad</th>
-                        <th class="border px-4 py-2">Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí se llenarán los movimientos mediante JS -->
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Ajuste Manual de Inventario -->
-        <section id="manual-adjustment" class="mb-8">
-            <h2 class="text-xl font-semibold mb-4">Ajuste Manual de Inventario</h2>
-            <form id="adjustmentForm">
-                <label for="productSelect">Producto</label>
-                <select id="productSelect" class="px-4 py-2 border rounded mb-4">
-                    <!-- Opciones de productos se llenarán mediante JS -->
-                </select>
-                
-                <label for="adjustmentAmount">Cantidad a Ajustar</label>
-                <input type="number" id="adjustmentAmount" class="px-4 py-2 border rounded mb-4" required>
-
-                <label for="adjustmentReason">Razón del Ajuste</label>
-                <textarea id="adjustmentReason" class="px-4 py-2 border rounded mb-4" required></textarea>
-
-                <button type="submit" class="btn">Guardar Ajuste</button>
-            </form>
-        </section>
+        <!-- Tabla de productos -->
+        <table class="table-auto w-full mt-4" id="productosTabla">
+            <thead>
+                <tr>
+                    <th>ID Producto</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Sucursal</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los productos se llenarán dinámicamente con JS -->
+            </tbody>
+        </table>
     </div>
+
+
+
 </body>
 </html>
